@@ -35,14 +35,5 @@
 /Debug
 /SFMLUdpClient/Debug
 /SFMLUdpServer/Debug
-/SFMLUdpServer/SFMLUdpServer.vcxproj
-/SFMLUdpServer/SFMLUdpServer.vcxproj.filters
-/SFMLUdpServer/SFMLUdpServer.vcxproj.user
-/SFMLUdpClient/SFMLUdpClient.vcxproj
-/SFMLUdpClient/SFMLUdpClient.vcxproj.filters
-/SFMLUdpClient/SFMLUdpClient.vcxproj.user
 /Common/RCa19436
 /Common/RCa25184
-/Common/Common.vcxproj
-/Common/Common.vcxproj.filters
-/Common/Common.vcxproj.user
