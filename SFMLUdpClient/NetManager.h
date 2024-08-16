@@ -94,3 +94,21 @@ void Listen(sf::UdpSocket& socket, GameState*& currentState, GameState*& nextSta
 		break;
 	}
 }
+void InterPolateEntities(GameState* current, GameState* next, float alpha)
+{
+	if (current == nullptr || next == nullptr)
+		return;
+	EntityList* currentList = current->GetEntityList();
+	EntityList* nextList = next->GetEntityList();
+	if (currentList == nullptr || nextList == nullptr)
+		return;
+	for (int i = 0; i < currentList->GetSize(); i++)
+	{
+		BaseEntity* currentEntity = currentList->GetEntity(i);
+		BaseEntity* nextEntity = nextList->GetEntityById(currentEntity->GetId());
+		if (nextEntity == nullptr)
+			continue;
+		sf::Vector2f position = currentEntity->GetPosition() + (nextEntity->GetPosition() - currentEntity->GetPosition()) * alpha;
+		currentEntity->SetPosition(position);
+	}
+}

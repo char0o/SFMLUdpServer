@@ -1,8 +1,8 @@
 #pragma once
 #include <iostream>
-void SendEntities(sf::UdpSocket& socket, const EntityList& entities, const ClientList& clients)
+void SendEntities(sf::UdpSocket& socket, const EntityList& entities, const ClientList& clients, int ticks)
 {
-	clients.SendEntities(socket, entities);
+	clients.SendEntities(socket, entities, ticks);
 }
 void Listen(sf::UdpSocket& socket, EntityList& entityList, ClientList& clientList)
 {

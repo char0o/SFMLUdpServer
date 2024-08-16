@@ -19,12 +19,11 @@ int main(int argc, char* argv[])
 		std::cout << "Error while binding the socket" << std::endl;
 		return -1;
 	}
-	const float timeStep = 1.0f / 10.0f;
 	sf::Clock clock;
 	float timeAccumulator = 0.0f;
-	float totalTime = 0.0f;
+	sf::Time totalTime;
 	bool quit = false;
-
+	int ticks = 0;
 	ClientList clientList;
 	EntityList entityList;
 	Entity* entity = nullptr;
@@ -43,13 +42,14 @@ int main(int argc, char* argv[])
 		float dt = clock.restart().asSeconds();
 		timeAccumulator += dt;
 
-		while (timeAccumulator >= timeStep)
+		while (timeAccumulator >= TICKRATE)
 		{	
-			totalTime += timeStep;
+			totalTime += sf::seconds(TICKRATE);
 			Listen(socket, entityList, clientList);
-			SendEntities(socket, entityList, clientList);
-			entityList.Update(sf::seconds(timeStep));		
-			timeAccumulator -= timeStep;
+			SendEntities(socket, entityList, clientList, ticks);
+			entityList.Update(sf::seconds(TICKRATE));
+			timeAccumulator -= TICKRATE;
+			ticks++;
 		}
 	}
 	return 0;

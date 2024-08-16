@@ -7,7 +7,7 @@ class EntityListPacket
 {
 public:
 	EntityListPacket();
-	EntityListPacket(const EntityList& entityList);
+	EntityListPacket(const EntityList& entityList, int ticks);
 	~EntityListPacket();
 	sf::Packet* GetPacket();
 private:

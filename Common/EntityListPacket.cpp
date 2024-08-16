@@ -5,10 +5,11 @@ EntityListPacket::EntityListPacket()
 	packet = new sf::Packet();
 	*packet << static_cast<int>(PacketType::Entities);
 }
-EntityListPacket::EntityListPacket(const EntityList& entityList)
+EntityListPacket::EntityListPacket(const EntityList& entityList, int ticks)
 {
 	packet = new sf::Packet();
 	*packet << static_cast<int>(PacketType::Entities);
+	*packet << ticks;
 	*packet << entityList.GetSize();
 	for (int i = 0; i < entityList.GetSize(); i++)
 	{

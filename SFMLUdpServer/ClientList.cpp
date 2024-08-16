@@ -72,11 +72,11 @@ int ClientList::GetAvailableId()
 	}
 	return id;
 }
-void ClientList::SendEntities(sf::UdpSocket& socket, const EntityList& entities) const
+void ClientList::SendEntities(sf::UdpSocket& socket, const EntityList& entities, int ticks) const
 {
 	for (int i = 0; i < clients.size(); i++)
 	{
-		EntityListPacket entityListPacket(entities);
+		EntityListPacket entityListPacket(entities, ticks);
 
 		socket.send(*entityListPacket.GetPacket(), clients[i]->getIp(), clients[i]->getPort());
 	}

@@ -13,6 +13,7 @@ public:
 	void Update(Time dt, const RenderWindow& window) override {};
 	Vector2f GetPosition() const;
 	void Draw(RenderWindow& window) override {};
+	//void SetColor(const Color& color) override {};
 private:
 };
 

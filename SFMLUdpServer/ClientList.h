@@ -16,7 +16,7 @@ class ClientList
 	Client* GetClientByIp(sf::IpAddress ip, unsigned short port);
 	int GetSize() const;
 	int GetAvailableId();
-	void SendEntities(sf::UdpSocket& socket, const EntityList& entityList) const;
+	void SendEntities(sf::UdpSocket& socket, const EntityList& entityList, int ticks) const;
 	const int MAX_CLIENTS = 8;
 private:
 	int currentId;

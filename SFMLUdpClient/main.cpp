@@ -9,10 +9,11 @@
 #include <string>
 #include "NetManager.h"
 #include "Packets.hpp"
-
+#include "Globals.h"
 using namespace std;
 int main(int argc, char* argv[])
 {
+	bool interp = true;
 	cout << "Enter server IP: ";
 	string ip;
 	cin >> ip;
@@ -28,9 +29,10 @@ int main(int argc, char* argv[])
 	}
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML UDP Client");
-	sf::Clock dtClock;
-	float totalTime = 0.0f;
-	window.setFramerateLimit(60);
+	sf::Time totalTime = sf::Time::Zero;
+	sf::Clock dtClock = sf::Clock();
+
+	window.setFramerateLimit(165);
 
 	EntityList* currentEntityList = new EntityList();
 	EntityList* nextEntityList = new EntityList();
@@ -45,17 +47,28 @@ int main(int argc, char* argv[])
 			{			
 				window.close();
 			}
+			if (event.type == sf::Event::KeyPressed)
+			{
+				if (event.key.code == sf::Keyboard::I)
+				{
+					interp = !interp;
+				}
+			}
 		}
-		Listen(*socket, currentState, nextState);
-
-		sf::Time dt = dtClock.restart();
-		totalTime += dt.asSeconds();
+		
+		
 		window.clear();
 		currentState->Color(sf::Color::Red);
 		nextState->Color(sf::Color::Blue);
+
+		float alpha = (totalTime.asMilliseconds() % (int)(TICKRATE * 100)) / (TICKRATE * 100.0f);
+		if (interp)
+			InterPolateEntities(currentState, nextState, alpha);
 		currentState->Draw(window);
-		nextState->Draw(window);
+		//nextState->Draw(window);
 		window.display();
+		Listen(*socket, currentState, nextState);
+		totalTime += dtClock.restart();
 	}
 	SendDisconnectPacket(*socket);
 	if (socket != nullptr)

@@ -15,6 +15,9 @@ GameState::GameState(EntityList* entityList, sf::Packet& packet)
 	this->entityList = entityList;
 	int id;
 	int size;
+	int ticks;
+	packet >> ticks;	
+	this->ticks = ticks;
 	packet >> size;
 	for (int i = 0; i < size; i++)
 	{
@@ -27,6 +30,7 @@ GameState::GameState(EntityList* entityList, sf::Packet& packet)
 			Entity* entity = new Entity();
 			entity->SetId(id);
 			packet >> position.x >> position.y;
+			std::cout << "Position: " << position.x << " " << position.y << std::endl;
 			entity->SetPosition(position);
 			entityList->AddEntity(entity);
 		}
