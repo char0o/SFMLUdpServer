@@ -149,6 +149,7 @@
     <ClInclude Include="EntityList.h" />
     <ClInclude Include="BaseEntity.h" />
     <ClInclude Include="EntityListPacket.h" />
+    <ClInclude Include="Globals.h" />
     <ClInclude Include="Packets.hpp" />
     <ClInclude Include="PacketType.h" />
     <ClInclude Include="PlayerPacket.h" />

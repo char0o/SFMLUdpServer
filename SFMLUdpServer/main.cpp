@@ -1,5 +1,8 @@
 #include "SFML/Network.hpp"
 #include "SFML/System.hpp"
+#include "Globals.h"
+#include "Client.h"
+#include "ClientList.h"
 #include "Packets.hpp"
 #include "NetManager.h"
 #include "Entity.h"
@@ -11,7 +14,7 @@ int main(int argc, char* argv[])
 	sf::UdpSocket socket;
 	socket.setBlocking(false);
 
-	if (socket.bind(2000) != sf::Socket::Done)
+	if (socket.bind(SERVER_PORT) != sf::Socket::Done)
 	{
 		std::cout << "Error while binding the socket" << std::endl;
 		return -1;
@@ -22,10 +25,10 @@ int main(int argc, char* argv[])
 	float totalTime = 0.0f;
 	bool quit = false;
 
-
+	ClientList clientList;
 	EntityList entityList;
 	Entity* entity = nullptr;
-	for (int i = 1; i < 500; i++)
+	for (int i = 1; i < 40; i++)
 	{
 		entity = new Entity();
 		entity->SetId(i);
@@ -43,8 +46,8 @@ int main(int argc, char* argv[])
 
 		while (timeAccumulator >= timeStep)
 		{	
-			Listen(socket, entityList);
-			SendEntities(socket, entityList);
+			Listen(socket, entityList, clientList);
+			SendEntities(socket, entityList, clientList);
 			entityList.Update(sf::seconds(timeStep));
 			timeAccumulator -= timeStep;
 		}

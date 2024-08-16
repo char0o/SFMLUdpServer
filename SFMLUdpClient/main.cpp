@@ -1,6 +1,7 @@
 #include "SFML/Network.hpp"
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
+#include "Globals.h"
 #include "Entity.h"
 #include "EntityList.h"
 #include <iostream>
@@ -11,28 +12,24 @@
 using namespace std;
 int main(int argc, char* argv[])
 {
-	sf::UdpSocket socket;
-	socket.setBlocking(false);
-	std::size_t received;
-	sf::IpAddress sender;
+	cout << "Enter server IP: ";
+	string ip;
+	cin >> ip;
+	cout << "Enter server port: ";
 	unsigned short port;
-	if (socket.bind(2001) != sf::Socket::Done)
+	cin >> port;
+	sf::UdpSocket* socket = CreateSocket(ip, port);
+	if (socket == nullptr)
 	{
-		std::cout << "Error while binding the socket" << std::endl;
-		return 0;
-	}
-	ConnectPacket connectPacket;
-	if (socket.send(*connectPacket.GetPacket(), "localhost", 2000) != sf::Socket::Done)
-	{
-		std::cout << "Error while sending the message" << std::endl;
-		return 0;
+		cout << "Failed to connect to server" << endl;
+		system("pause");
+		return 1;
 	}
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML UDP Client");
 	sf::Clock dtClock;
 	float totalTime = 0.0f;
 	window.setFramerateLimit(60);
-
 
 	EntityList entityList;
 	while (window.isOpen())
@@ -42,11 +39,11 @@ int main(int argc, char* argv[])
 		{
 			if (event.type == sf::Event::Closed)
 			{
-				SendDisconnectPacket(socket);
+				SendDisconnectPacket(*socket);
 				window.close();
 			}
 		}
-		Listen(socket, entityList);
+		Listen(*socket, entityList);
 
 		sf::Time dt = dtClock.restart();
 		totalTime += dt.asSeconds();
@@ -54,5 +51,6 @@ int main(int argc, char* argv[])
 		entityList.Draw(window);
 		window.display();
 	}
-
+	if (socket != nullptr)
+		delete socket;
 }

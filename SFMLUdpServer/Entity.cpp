@@ -44,11 +44,3 @@ void Entity::Update(Time dt)
 	}
 	position += velocity * deltaTime;
 }
-void Entity::SetIp(sf::IpAddress& ip)
-{
-	this->ip = ip;
-}
-sf::IpAddress Entity::GetIp() const
-{
-	return ip;
-}

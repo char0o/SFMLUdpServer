@@ -14,11 +14,6 @@ class Entity : public BaseEntity
 	void Draw(RenderWindow& window) override;
 	void SetPosition(Vector2f& pos);
 private:
-	Vector2f position;
-	Vector2f velocity;
-	Vector2f acceleration;
-	Vector2f direction;
-	float maxSpeed;
 	RectangleShape* shape;
 };
 

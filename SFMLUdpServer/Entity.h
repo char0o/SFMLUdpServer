@@ -13,10 +13,6 @@ public:
 	void Update(Time dt, const RenderWindow& window) override {};
 	Vector2f GetPosition() const;
 	void Draw(RenderWindow& window) override {};
-	void SetIp(sf::IpAddress& ip);
-
-	sf::IpAddress GetIp() const;
 private:
-	sf::IpAddress ip;
 };
 
