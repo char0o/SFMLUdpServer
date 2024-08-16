@@ -2,6 +2,7 @@
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
 #include "Entity.h"
+#include "EntityList.h"
 #include <iostream>
 #include <string>
 #include "NetManager.h"
@@ -11,29 +12,29 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	sf::UdpSocket socket;
-
+	socket.setBlocking(false);
 	std::size_t received;
 	sf::IpAddress sender;
 	unsigned short port;
 	if (socket.bind(2001) != sf::Socket::Done)
 	{
 		std::cout << "Error while binding the socket" << std::endl;
-		return -1;
+		return 0;
 	}
 	ConnectPacket connectPacket;
 	if (socket.send(*connectPacket.GetPacket(), "localhost", 2000) != sf::Socket::Done)
 	{
 		std::cout << "Error while sending the message" << std::endl;
+		return 0;
 	}
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML UDP Client");
-	Entity entity;
 	sf::Clock dtClock;
 	float totalTime = 0.0f;
 	window.setFramerateLimit(60);
 
 
-
+	EntityList entityList;
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -45,14 +46,12 @@ int main(int argc, char* argv[])
 				window.close();
 			}
 		}
-		sf::Vector2f pos = GetServerPosition(socket);
-		entity.SetPosition(pos);
+		Listen(socket, entityList);
 
 		sf::Time dt = dtClock.restart();
 		totalTime += dt.asSeconds();
 		window.clear();
-		//entity.Update(dt, window);
-		entity.Draw(window);
+		entityList.Draw(window);
 		window.display();
 	}
 

@@ -1,12 +1,7 @@
 #include "Entity.h"
 
-Entity::Entity()
+Entity::Entity() : BaseEntity()
 {
-	position = Vector2f(0, 0);
-	velocity = Vector2f(0, 0);
-	acceleration = Vector2f(0, 0);
-	direction = Vector2f(1, 1);
-	maxSpeed = 250.0f;
 	shape = new RectangleShape(Vector2f(50, 50));
 	shape->setPosition(position);
 	shape->setFillColor(Color::Red);

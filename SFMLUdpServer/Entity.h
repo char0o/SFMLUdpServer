@@ -1,18 +1,22 @@
 #pragma once
 #include "SFML/System.hpp"
+#include "SFML/Graphics.hpp"
+#include "SFML/Network.hpp"
+#include "BaseEntity.h"
 using namespace sf;
-class Entity
+class Entity : public BaseEntity
 {
 public:
 	Entity();
 	~Entity();
-	void Update(Time dt);
+	void Update(Time dt) override;
+	void Update(Time dt, const RenderWindow& window) override {};
 	Vector2f GetPosition() const;
+	void Draw(RenderWindow& window) override {};
+	void SetIp(sf::IpAddress& ip);
+
+	sf::IpAddress GetIp() const;
 private:
-	Vector2f position;
-	Vector2f velocity;
-	Vector2f acceleration;
-	Vector2f direction;
-	float maxSpeed;
+	sf::IpAddress ip;
 };
 

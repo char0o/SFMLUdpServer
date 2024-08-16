@@ -3,11 +3,7 @@
 #include "SFML/System.hpp"
 #include "PacketType.h"
 
-#ifdef PLAYER_PACKET_EXPORTS
-#define PLAYER_PACKET_API __declspec(dllexport)
-#else
-#define PLAYER_PACKET_API __declspec(dllimport)
-#endif
+
 
 class PlayerPacket
 {

@@ -6,7 +6,7 @@ PlayerPacket::PlayerPacket()
 PlayerPacket::PlayerPacket(int id, sf::Vector2f position)
 {
 	packet = new sf::Packet();
-	*packet << static_cast<int>(PacketType::Position) << id << position.x << position.y;
+	//*packet << static_cast<int>(PacketType::Position) << id << position.x << position.y;
 }
 sf::Packet* PlayerPacket::GetPacket()
 {

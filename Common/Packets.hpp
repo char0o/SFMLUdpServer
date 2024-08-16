@@ -2,3 +2,4 @@
 #include "ConnectPacket.h"
 #include "PlayerPacket.h"
 #include "DisconnectPacket.h"
+#include "EntityListPacket.h"

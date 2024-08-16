@@ -4,21 +4,21 @@
 #include <iostream>
 void SendConnectPacket(sf::UdpSocket& socket);
 void SendDisconnectPacket(sf::UdpSocket& socket);
-sf::Vector2f& GetServerPosition(sf::UdpSocket& socket);
+void Listen(sf::UdpSocket& socket, EntityList& entityList);
 
 void SendConnectPacket(sf::UdpSocket& socket)
 {
 	ConnectPacket connectPacket;
-	socket.send(*connectPacket.GetPacket(), sf::IpAddress::LocalHost, 2000);
+	socket.send(*connectPacket.GetPacket(), "localhost", 2000);
 }
 
 void SendDisconnectPacket(sf::UdpSocket& socket)
 {
 	DisconnectPacket disconnectPacket;
-	socket.send(*disconnectPacket.GetPacket(), sf::IpAddress::LocalHost, 2000);
+	socket.send(*disconnectPacket.GetPacket(), "localhost", 2000);
 }
 
-sf::Vector2f& GetServerPosition(sf::UdpSocket& socket)
+void Listen(sf::UdpSocket& socket, EntityList& entityList)
 {
 
 	sf::Packet packet;
@@ -27,8 +27,7 @@ sf::Vector2f& GetServerPosition(sf::UdpSocket& socket)
 	sf::Vector2f position;
 	if (socket.receive(packet, sender, port) != sf::Socket::Done)
 	{
-		std::cout << "Error while receiving the message" << std::endl;
-		return position;
+		return;
 	}
 
 	int packetType = 0;
@@ -38,12 +37,34 @@ sf::Vector2f& GetServerPosition(sf::UdpSocket& socket)
 	}
 	switch (packetType)
 	{
-	case PacketType::Position:
-	{
 		int id;
-		packet >> id >> position.x >> position.y;
-		return position;
+	case PacketType::Entities:
+		int size;
+		packet >> size;
+		for (int i = 0; i < size; i++)
+		{
+			packet >> id;
+			if (id == -1)
+				continue;
+			Vector2f position;
+			if (entityList.GetEntityById(id) == nullptr)
+			{
+				Entity* entity = new Entity();
+				entity->SetId(id);				
+				packet >> position.x >> position.y;
+				entity->SetPosition(position);
+				entityList.AddEntity(entity);
+			}
+			else
+			{
+				packet >> position.x >> position.y;
+				entityList.GetEntity(id)->SetPosition(position);
+			}
+		}
+		break;
+	case PacketType::Connect:
+		packet >> id;
+		std::cout << id;
+		break;
 	}
-	}
-	return position;
 }

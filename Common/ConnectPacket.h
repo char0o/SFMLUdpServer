@@ -5,6 +5,7 @@ class ConnectPacket
 {
 public:
 	ConnectPacket();
+	ConnectPacket(int id);
 	~ConnectPacket();
 	sf::Packet* GetPacket();
 private:

@@ -3,6 +3,6 @@ enum PacketType
 {
 	Connect,
 	Disconnect,
-	Position
+	Entities
 };
 
