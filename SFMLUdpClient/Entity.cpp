@@ -10,6 +10,11 @@ Entity::~Entity()
 {
 	delete shape;
 }
+void Entity::SetColor(const Color& color)
+{
+	BaseEntity::SetColor(color);
+	shape->setFillColor(color);
+}
 void Entity::Update(Time dt, const RenderWindow& window)
 {
 	float deltaTime = dt.asSeconds();

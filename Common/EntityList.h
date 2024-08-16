@@ -15,6 +15,7 @@ public:
 	BaseEntity* GetEntityById(int id) const;
 	void Draw(sf::RenderWindow& window);
 	void Update(sf::Time dt);
+	void Color(const sf::Color& color);
 private:
 	std::vector<BaseEntity*> entities;
 };

@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "Entity.h"
 #include "EntityList.h"
+#include "GameState.h"
 #include <iostream>
 #include <string>
 #include "NetManager.h"
@@ -31,26 +32,35 @@ int main(int argc, char* argv[])
 	float totalTime = 0.0f;
 	window.setFramerateLimit(60);
 
-	EntityList entityList;
+	EntityList* currentEntityList = new EntityList();
+	EntityList* nextEntityList = new EntityList();
+	GameState* nextState = new GameState(nextEntityList);
+	GameState* currentState = new GameState(currentEntityList);
 	while (window.isOpen())
 	{
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
-			{
-				SendDisconnectPacket(*socket);
+			{			
 				window.close();
 			}
 		}
-		Listen(*socket, entityList);
+		Listen(*socket, currentState, nextState);
 
 		sf::Time dt = dtClock.restart();
 		totalTime += dt.asSeconds();
 		window.clear();
-		entityList.Draw(window);
+		currentState->Color(sf::Color::Red);
+		nextState->Color(sf::Color::Blue);
+		currentState->Draw(window);
+		nextState->Draw(window);
 		window.display();
 	}
+	SendDisconnectPacket(*socket);
 	if (socket != nullptr)
 		delete socket;
+	delete currentEntityList;
+	delete nextEntityList;
+	
 }

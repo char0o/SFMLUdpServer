@@ -32,3 +32,11 @@ Vector2f BaseEntity::GetPosition() const
 {
 	return position;
 }
+void BaseEntity::SetColor(const Color& color)
+{
+	this->color = color;
+}
+Color BaseEntity::GetColor() const
+{
+	return color;
+}

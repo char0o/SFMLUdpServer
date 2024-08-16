@@ -28,6 +28,7 @@ sf::UdpSocket* CreateSocket(sf::IpAddress address, int port)
 			socket->send(*connectPacket.GetPacket(), address, port);
 
 			lastChecked = elapsed;
+
 		}
 		sf::Packet answer;
 		sf::IpAddress sender;
@@ -35,14 +36,13 @@ sf::UdpSocket* CreateSocket(sf::IpAddress address, int port)
 		if (socket->receive(answer, sender, senderPort) == sf::Socket::Done)
 		{
 			int packetType;
-			std::cout << "Received packet" << std::endl;
 			answer >> packetType;
 			if (packetType == PacketType::Connect)
 			{
 				std::cout << "Connected to server" << std::endl;
 				return socket;
 			}
-		}		
+		}
 	}
 	delete socket;
 	return nullptr;
@@ -59,7 +59,7 @@ void SendDisconnectPacket(sf::UdpSocket& socket)
 	socket.send(*disconnectPacket.GetPacket(), "localhost", 2000);
 }
 
-void Listen(sf::UdpSocket& socket, EntityList& entityList)
+void Listen(sf::UdpSocket& socket, GameState*& currentState, GameState*& nextState)
 {
 
 	sf::Packet packet;
@@ -80,29 +80,14 @@ void Listen(sf::UdpSocket& socket, EntityList& entityList)
 	{
 		int id;
 	case PacketType::Entities:
-		int size;
-		packet >> size;
-		for (int i = 0; i < size; i++)
-		{
-			packet >> id;
-			if (id == -1)
-				continue;
-			Vector2f position;
-			if (entityList.GetEntityById(id) == nullptr)
-			{
-				Entity* entity = new Entity();
-				entity->SetId(id);				
-				packet >> position.x >> position.y;
-				entity->SetPosition(position);
-				entityList.AddEntity(entity);
-			}
-			else
-			{
-				packet >> position.x >> position.y;
-				entityList.GetEntityById(id)->SetPosition(position);
-			}
-		}
-		break;
+	{
+		GameState* tempCurrent = currentState;
+		GameState* tempNext = nextState;
+		currentState = tempNext;
+		nextState = new GameState(tempCurrent->GetEntityList(), packet);
+		delete tempCurrent;
+	}
+	break;
 	case PacketType::Connect:
 		packet >> id;
 		std::cout << id;

@@ -13,6 +13,7 @@ class Entity : public BaseEntity
 	void Update(Time dt, const RenderWindow& window);
 	void Draw(RenderWindow& window) override;
 	void SetPosition(Vector2f& pos);
+	void SetColor(const Color& color) override;
 private:
 	RectangleShape* shape;
 };

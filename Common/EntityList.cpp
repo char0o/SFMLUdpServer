@@ -17,7 +17,13 @@ void EntityList::AddEntity(BaseEntity* entity)
 {
 	entities.push_back(entity);
 }
-
+void EntityList::Color(const sf::Color& color)
+{
+	for (int i = 0; i < entities.size(); i++)
+	{
+		entities[i]->SetColor(color);
+	}
+}
 void EntityList::RemoveEntity(BaseEntity* entity)
 {
 	for (int i = 0; i < entities.size(); i++)
