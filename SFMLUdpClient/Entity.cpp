@@ -18,73 +18,44 @@ void Entity::SetColor(const Color& color)
 void Entity::Update(Time dt, const RenderWindow& window)
 {
 	float deltaTime = dt.asSeconds();
-	std::cout << deltaTime << std::endl;
-	if (position.x > 800 - 50)
+
+	Vector2f direction;
+	if (moveUp)
 	{
-		position.x = 800 - 50;
-		direction.x = -1;
-	}
-	if (position.x < 0)
-	{
-		position.x = 0;
-		direction.x = 1;	
-	}
-	if (position.y > 600 - 50)
-	{
-		position.y = 600 - 50;
+		std::cout << "Move up" << std::endl;
 		direction.y = -1;
 	}
-	if (position.y < 0)
+	if (moveDown)
 	{
-		position.y = 0;
 		direction.y = 1;
 	}
-	velocity += direction * 1000.0f * deltaTime;
+	if (moveLeft)
+	{
+		direction.x = -1;
+	}
+	if (moveRight)
+	{
+		direction.x = 1;
+	}
+
+	if (direction.x != 0 || direction.y != 0)
+	{
+		float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+		direction.x /= length;
+	}
+
+	velocity += direction * 2500.0f * deltaTime;
+
 	float speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
 	if (speed > maxSpeed)
 	{
 		velocity *= maxSpeed / speed;
 	}
+
 	position += velocity * deltaTime;
+
+	velocity *= 1.0f / (1.0f + 10.0f * deltaTime);
 	shape->setPosition(position);
-	//float deltaTime = dt.asSeconds();
-
-	//Vector2f direction;
-	//if (Keyboard::isKeyPressed(Keyboard::W))
-	//{
-	//	direction.y = -1;
-	//}
-	//if (Keyboard::isKeyPressed(Keyboard::S))
-	//{
-	//	direction.y = 1;
-	//}
-	//if (Keyboard::isKeyPressed(Keyboard::A))
-	//{
-	//	direction.x = -1;
-	//}
-	//if (Keyboard::isKeyPressed(Keyboard::D))
-	//{
-	//	direction.x = 1;
-	//}
-
-	//if (direction.x != 0 || direction.y != 0)
-	//{
-	//	float length = sqrt(direction.x * direction.x + direction.y * direction.y);
-	//	direction.x /= length;
-	//}
-
-	//velocity += direction * 1000.0f * deltaTime;
-
-	//float speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-	//if (speed > maxSpeed)
-	//{
-	//	velocity *= maxSpeed / speed;
-	//}
-
-	//position += velocity * deltaTime;
-
-	//velocity *= 1.0f / (1.0f + 10.0f * deltaTime);
-	//shape->setPosition(position);
 }
 void Entity::Draw(RenderWindow& window)
 {

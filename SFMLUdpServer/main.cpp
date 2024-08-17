@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 		while (timeAccumulator >= TICKRATIO)
 		{	
 			HandleCommands(commandQueue, entityList, ticks);
-			Listen(socket, entityList, clientList);
+			Listen(socket, entityList, clientList, commandQueue);
 			SendEntities(socket, entityList, clientList, ticks);
 			entityList.Update(sf::seconds(TICKRATIO));
 			timeAccumulator -= TICKRATIO;

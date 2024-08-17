@@ -90,16 +90,7 @@ void HandleCommands(std::queue<NetCommand>& commandQueue, EntityList& entityList
 		else if (command.GetCommand() == "-moveright")
 		{
 			entity->moveRight = false;
-		}
-		else if (command.GetCommand() == "+shoot")
-		{
-			entity->shoot = true;
-		}
-		else if (command.GetCommand() == "-shoot")
-		{
-			entity->shoot = false;
-		}
-		
+		}		
 	}
 
 }

@@ -5,6 +5,7 @@ class NetCommand
 {
 public:
 	NetCommand();
+	NetCommand(std::string command, int tick);
 	NetCommand(std::string command, int tick, sf::IpAddress ip, unsigned short port);
 	~NetCommand();
 

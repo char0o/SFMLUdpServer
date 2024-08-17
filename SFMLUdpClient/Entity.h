@@ -10,10 +10,14 @@ class Entity : public BaseEntity
 	Entity();
 	~Entity();
 	void Update(Time dt) override {};
-	void Update(Time dt, const RenderWindow& window);
+	void Update(Time dt, const RenderWindow& window) override;
 	void Draw(RenderWindow& window) override;
 	void SetPosition(Vector2f& pos);
 	void SetColor(const Color& color) override;
+	bool moveUp;
+	bool moveDown;
+	bool moveLeft;
+	bool moveRight;
 private:
 	RectangleShape* shape;
 };

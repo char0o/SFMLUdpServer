@@ -4,6 +4,7 @@ EntityList::EntityList()
 {
 
 }
+
 EntityList::~EntityList()
 {
 	for (int i = 0; i < entities.size(); i++)
@@ -43,7 +44,7 @@ int EntityList::GetSize() const
 }
 Entity* EntityList::GetEntity(int index) const
 {
-	if (index > entities.size() - 1)
+	if (index > entities.size() - 1 || index < 0 || entities.size() == 0)
 	{
 		return nullptr;
 	}
@@ -60,10 +61,13 @@ Entity* EntityList::GetEntityById(int id) const
 	}
 	return nullptr;
 }
-void EntityList::Draw(sf::RenderWindow& window)
+void EntityList::Draw(sf::RenderWindow& window, int localPlayer)
 {
 	for (int i = 0; i < entities.size(); i++)
 	{
+		if (entities[i]->GetId() == localPlayer)		
+			continue;
+
 		entities[i]->Draw(window);
 	}
 }
@@ -73,5 +77,14 @@ void EntityList::Update(sf::Time dt)
 	for (int i = 0; i < entities.size(); i++)
 	{
 		entities[i]->Update(dt);
+	}
+}
+
+void EntityList::Update(sf::Time dt, sf::RenderWindow& window)
+{
+	for (int i = 0; i < entities.size(); i++)
+	{
+
+		entities[i]->Update(dt, window);
 	}
 }

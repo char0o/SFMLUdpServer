@@ -20,12 +20,11 @@ int main(int argc, char* argv[])
 	cout << "Enter server port: ";
 	unsigned short port;
 	cin >> port;
-	sf::UdpSocket* socket = CreateSocket(ip, port);
-	if (socket == nullptr)
+	NetManager netManager;
+	if (!netManager.Connect(ip, port))
 	{
-		cout << "Failed to connect to server" << endl;
-		system("pause");
-		return 1;
+		cout << "Failed to connect to server." << endl;
+		return -1;
 	}
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML UDP Client");
@@ -38,6 +37,8 @@ int main(int argc, char* argv[])
 	EntityList* nextEntityList = new EntityList();
 	GameState* nextState = new GameState(nextEntityList);
 	GameState* currentState = new GameState(currentEntityList);
+	
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -46,11 +47,12 @@ int main(int argc, char* argv[])
 		accumulator += dt;
 		while (accumulator >= TICKRATIO)
 		{
-			Listen(*socket, currentState, nextState);
+			netManager.Listen(currentState, nextState);
 			accumulator -= TICKRATIO;
 		}
 		while (window.pollEvent(event))
 		{
+			netManager.SendCommands(event, currentState->GetTicks(), *currentEntityList);
 			if (event.type == sf::Event::Closed)
 			{			
 				window.close();
@@ -65,19 +67,17 @@ int main(int argc, char* argv[])
 				}
 			}
 		}
-		
-		
+
 		window.clear();
+		
 		currentState->Draw(window);
 		window.display();
-
-
-		if (interp)
-			InterPolateEntities(currentState, nextState, accumulator / TICKRATE);
+		
+		//if (interp)
+			//InterPolateEntities(currentState, nextState, accumulator / TICKRATE);
+	
 	}
-	SendDisconnectPacket(*socket);
-	if (socket != nullptr)
-		delete socket;
+	netManager.SendDisconnectPacket();
 	delete currentEntityList;
 	delete nextEntityList;
 	

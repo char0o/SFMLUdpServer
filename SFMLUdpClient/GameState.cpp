@@ -12,9 +12,10 @@ GameState::GameState(EntityList* entityList)
 	this->ticks = ticks;
 }
 
-GameState::GameState(EntityList* entityList, sf::Packet& packet, int ticks)
+GameState::GameState(EntityList* entityList, sf::Packet& packet, int ticks, int localPlayer)
 {
 	this->entityList = entityList;
+	this->localPlayer = localPlayer;
 	int id;
 	int size;
 	this->ticks = ticks;
@@ -52,13 +53,16 @@ void GameState::Color(const sf::Color& color)
 	entityList->Color(color);
 }
 
-void GameState::Update(float dt)
+void GameState::Update(float dt, RenderWindow& window)
 {
+	if (entityList == nullptr)
+		return;
+	entityList->Update(sf::seconds(dt), window);
 }
 
 void GameState::Draw(sf::RenderWindow& window)
 {
 	if (entityList == nullptr)
 		return;
-	entityList->Draw(window);
+	entityList->Draw(window, localPlayer);
 }

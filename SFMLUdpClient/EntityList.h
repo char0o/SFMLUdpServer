@@ -13,8 +13,9 @@ public:
 	int GetSize() const;
 	Entity* GetEntity(int index) const;
 	Entity* GetEntityById(int id) const;
-	void Draw(sf::RenderWindow& window);
+	void Draw(sf::RenderWindow& window, int localPlayer);
 	void Update(sf::Time dt);
+	void Update(sf::Time dt, sf::RenderWindow& window);
 	void Color(const sf::Color& color);
 private:
 	std::vector<Entity*> entities;

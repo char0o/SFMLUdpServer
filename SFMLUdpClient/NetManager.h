@@ -1,120 +1,40 @@
 #pragma once
 #include "SFML/Network.hpp"
+#include "SFML/Window.hpp"
+#include  "GameState.h"
 #include "Packets.hpp"
 #include <iostream>
-void SendConnectPacket(sf::UdpSocket& socket);
-void SendDisconnectPacket(sf::UdpSocket& socket);
-void Listen(sf::UdpSocket& socket, EntityList& entityList);
+#include "Globals.h"
 
-const int CONNECTION_DELAY = 5;
-sf::UdpSocket* CreateSocket(sf::IpAddress address, int port)
+using namespace sf;
+struct ServerInfo
 {
-	std::cout << "Connecting to " << address << " on port " << port << std::endl;
-	sf::UdpSocket* socket = new sf::UdpSocket();
-	socket->setBlocking(false);
-	if (socket->bind(CLIENT_PORT) != sf::Socket::Done)
-	{
-		std::cout << "Failed to bind socket" << std::endl;
-	}
-	sf::Clock clock;
-	sf::Time lastChecked = sf::Time::Zero;
-	while (clock.getElapsedTime().asSeconds() < CONNECTION_DELAY)
-	{
-		sf::Time elapsed = clock.getElapsedTime();
-		if (elapsed.asSeconds() - lastChecked.asSeconds() >= 1)
-		{
-			std::cout << "Trying to connect..." << std::endl;;
-			ConnectPacket connectPacket;
-			socket->send(*connectPacket.GetPacket(), address, port);
+	sf::IpAddress address = "localhost";
+	int port = 0;
+};
 
-			lastChecked = elapsed;
 
-		}
-		sf::Packet answer;
-		sf::IpAddress sender;
-		unsigned short senderPort;
-		if (socket->receive(answer, sender, senderPort) == sf::Socket::Done)
-		{
-			int packetType;
-			answer >> packetType;
-			if (packetType == PacketType::Connect)
-			{
-				std::cout << "Connected to server" << std::endl;
-				return socket;
-			}
-		}
-	}
-	delete socket;
-	return nullptr;
-}
-void SendConnectPacket(sf::UdpSocket& socket)
+class NetManager
 {
-	ConnectPacket connectPacket;
-	socket.send(*connectPacket.GetPacket(), "localhost", 2000);
-}
+public:
+	NetManager();
+	~NetManager();
 
-void SendDisconnectPacket(sf::UdpSocket& socket)
-{
-	DisconnectPacket disconnectPacket;
-	socket.send(*disconnectPacket.GetPacket(), "localhost", 2000);
-}
+	int GetLocalPlayer() const;
 
-void Listen(sf::UdpSocket& socket, GameState*& currentState, GameState*& nextState)
-{
+	bool Connect(IpAddress address, int port);
+	void SendDisconnectPacket();
+	const int CONNECTION_DELAY = 5;
+	void SendCommands(Event& event, int ticks, EntityList& entityList);
+	void Listen(GameState*& currentState, GameState*& nextState);
+	void InterPolateEntities(GameState* current, GameState* next, float dt);
+private:
+	UdpSocket* socket;
+	ServerInfo* serverInfo;
+	int localPlayer = 0;
+};
 
-	sf::Packet packet;
-	sf::IpAddress sender;
-	unsigned short port;
-	sf::Vector2f position;
-	if (socket.receive(packet, sender, port) != sf::Socket::Done)
-	{
-		return;
-	}
 
-	int packetType = 0;
-	if (!(packet >> packetType))
-	{
-		std::cout << "No packet type" << std::endl;
-	}
-	switch (packetType)
-	{
-		int id;
-	case PacketType::Entities:
-	{
-		int ticks;
-		packet >> ticks;
-		if (currentState->GetTicks() >= ticks)
-			return;
 
-		GameState* tempCurrent = currentState;
-		GameState* tempNext = nextState;
-		currentState = tempNext;
-		nextState = new GameState(tempCurrent->GetEntityList(), packet, ticks);
-		delete tempCurrent;
-	}
-	break;
-	case PacketType::Connect:
-		packet >> id;
-		std::cout << id;
-		break;
-	}
-}
-void InterPolateEntities(GameState* current, GameState* next, float dt)
-{
-	if (current == nullptr || next == nullptr)
-		return;
-	EntityList* currentList = current->GetEntityList();
-	EntityList* nextList = next->GetEntityList();
-	if (currentList == nullptr || nextList == nullptr)
-		return;
-	for (int i = 0; i < currentList->GetSize(); i++)
-	{
-		BaseEntity* currentEntity = currentList->GetEntity(i);
-		BaseEntity* nextEntity = nextList->GetEntityById(currentEntity->GetId());
-		if (nextEntity == nullptr)
-			continue;
-		float alpha = dt / TICKRATIO;
-		sf::Vector2f position = currentEntity->GetPosition() + (nextEntity->GetPosition() - currentEntity->GetPosition()) * alpha;
-		currentEntity->SetPosition(position);
-	}
-}
+
+

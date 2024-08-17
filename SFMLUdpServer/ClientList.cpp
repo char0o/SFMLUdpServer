@@ -43,7 +43,7 @@ Client* ClientList::GetClientById(int it)
 {
 	for (int i = 0; i < clients.size(); i++)
 	{
-		if (clients[i]->getId() == it)
+		if (clients[i]->GetId() == it)
 			return clients[i];
 	}
 	return nullptr;
@@ -53,7 +53,7 @@ Client* ClientList::GetClientByIp(sf::IpAddress ip, unsigned short port)
 {
 	for (int i = 0; i < clients.size(); i++)
 	{
-		if (clients[i]->getIp() == ip && clients[i]->getPort() == port)
+		if (clients[i]->GetIp() == ip && clients[i]->GetPort() == port)
 			return clients[i];
 	}
 	return nullptr;
@@ -78,7 +78,7 @@ void ClientList::SendEntities(sf::UdpSocket& socket, const EntityList& entities,
 	{
 		EntityListPacket entityListPacket(entities, ticks);
 
-		socket.send(*entityListPacket.GetPacket(), clients[i]->getIp(), clients[i]->getPort());
+		socket.send(*entityListPacket.GetPacket(), clients[i]->GetIp(), clients[i]->GetPort());
 	}
 }
 int ClientList::GetSize() const

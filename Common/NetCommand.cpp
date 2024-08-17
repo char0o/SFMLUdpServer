@@ -8,6 +8,14 @@ NetCommand::NetCommand()
 	this->port = 0;
 }
 
+NetCommand::NetCommand(std::string command, int tick)
+{
+	this->command = command;
+	this->tick = tick;
+	this->ip = sf::IpAddress::None;
+	this->port = 0;
+}
+
 NetCommand::NetCommand(std::string command, int tick, sf::IpAddress ip, unsigned short port)
 {
 	this->command = command;

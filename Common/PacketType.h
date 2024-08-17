@@ -6,4 +6,3 @@ enum PacketType
 	Entities,
 	Command
 };
-
