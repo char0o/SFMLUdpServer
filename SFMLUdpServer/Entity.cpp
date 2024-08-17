@@ -5,6 +5,11 @@ Entity::Entity() : BaseEntity()
 
 }
 
+Entity::Entity(Client* client) : BaseEntity()
+{
+	this->client = client;
+}
+
 Entity::~Entity()
 {
 
@@ -16,25 +21,21 @@ Vector2f Entity::GetPosition() const
 void Entity::Update(Time dt)
 {
 	float deltaTime = dt.asSeconds();
-	if (position.x > 800 - 50)
+	if (moveUp)
 	{
-		position.x = 800 - 51;
-		direction.x = -1;
+		direction = Vector2f(0.0f, -1.0f);
 	}
-	if (position.x < 0)
+	if (moveDown)
 	{
-		position.x = 1;
-		direction.x = 1;
+		direction = Vector2f(0.0f, 1.0f);
 	}
-	if (position.y > 600 - 50)
+	if (moveLeft)
 	{
-		position.y = 600 - 51;
-		direction.y = -1;
+		direction = Vector2f(-1.0f, 0.0f);
 	}
-	if (position.y < 0)
+	if (moveRight)
 	{
-		position.y = 1;
-		direction.y = 1;
+		direction = Vector2f(1.0f, 0.0f);
 	}
 	velocity += direction * 1000.0f * deltaTime;
 	float speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
@@ -43,4 +44,9 @@ void Entity::Update(Time dt)
 		velocity *= maxSpeed / speed;
 	}
 	position += velocity * deltaTime;
+}
+
+Client* Entity::GetClient() const
+{
+	return client;
 }

@@ -2,4 +2,5 @@
 #include "ConnectPacket.h"
 #include "PlayerPacket.h"
 #include "DisconnectPacket.h"
-#include "EntityListPacket.h"
+#include "CommandPacket.h"
+#include "NetCommand.h"

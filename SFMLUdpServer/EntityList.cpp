@@ -2,7 +2,7 @@
 
 EntityList::EntityList()
 {
-	
+
 }
 EntityList::~EntityList()
 {
@@ -13,24 +13,18 @@ EntityList::~EntityList()
 	entities.clear();
 }
 
-void EntityList::AddEntity(BaseEntity* entity)
+void EntityList::AddEntity(Entity* entity)
 {
 	entities.push_back(entity);
 }
-void EntityList::Color(const sf::Color& color)
-{
-	for (int i = 0; i < entities.size(); i++)
-	{
-		entities[i]->SetColor(color);
-	}
-}
-void EntityList::RemoveEntity(BaseEntity* entity)
+
+void EntityList::RemoveEntity(Entity* entity)
 {
 	for (int i = 0; i < entities.size(); i++)
 	{
 		if (entities[i] == entity)
 		{
-			BaseEntity* temp = entities[i];
+			Entity* temp = entities[i];
 			entities.erase(entities.begin() + i);
 			delete temp;
 			break;
@@ -41,7 +35,7 @@ int EntityList::GetSize() const
 {
 	return entities.size();
 }
-BaseEntity* EntityList::GetEntity(int index) const
+Entity* EntityList::GetEntity(int index) const
 {
 	if (index > entities.size() - 1)
 	{
@@ -49,7 +43,7 @@ BaseEntity* EntityList::GetEntity(int index) const
 	}
 	return entities[index];
 }
-BaseEntity* EntityList::GetEntityById(int id) const
+Entity* EntityList::GetEntityById(int id) const
 {
 	for (int i = 0; i < entities.size(); i++)
 	{
@@ -60,13 +54,6 @@ BaseEntity* EntityList::GetEntityById(int id) const
 	}
 	return nullptr;
 }
-void EntityList::Draw(sf::RenderWindow& window)
-{
-	for (int i = 0; i < entities.size(); i++)
-	{
-		entities[i]->Draw(window);
-	}
-}
 
 void EntityList::Update(sf::Time dt)
 {
@@ -74,4 +61,19 @@ void EntityList::Update(sf::Time dt)
 	{
 		entities[i]->Update(dt);
 	}
+}
+
+Entity* EntityList::GetEntityByIp(sf::IpAddress ip, unsigned short port) const
+{
+	for (int i = 0; i < entities.size(); i++)
+	{
+		if (entities[i]->GetClient() != nullptr)
+		{
+			if (entities[i]->GetClient()->GetIp() == ip && entities[i]->GetClient()->GetPort() == port)
+			{
+				return entities[i];
+			}
+		 }
+	}
+	return nullptr;
 }

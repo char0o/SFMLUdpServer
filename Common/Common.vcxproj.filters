@@ -30,16 +30,16 @@
     <ClInclude Include="DisconnectPacket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EntityList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BaseEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EntityListPacket.h">
+    <ClInclude Include="Globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Globals.h">
+    <ClInclude Include="CommandPacket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,13 +53,13 @@
     <ClCompile Include="DisconnectPacket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EntityList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BaseEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EntityListPacket.cpp">
+    <ClCompile Include="CommandPacket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

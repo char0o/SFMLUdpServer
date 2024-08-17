@@ -7,8 +7,10 @@
 #include "NetManager.h"
 #include "Entity.h"
 #include "EntityList.h"
+#include "EntityListPacket.h"
 #include <iostream>
 #include <thread>
+#include <queue>
 int main(int argc, char* argv[])
 {
 	sf::UdpSocket socket;
@@ -26,29 +28,21 @@ int main(int argc, char* argv[])
 	int ticks = 0;
 	ClientList clientList;
 	EntityList entityList;
-	Entity* entity = nullptr;
-	for (int i = 1; i < 2; i++)
-	{
-		entity = new Entity();
-		entity->SetId(i);
-		Vector2f position(rand() % 800, rand() % 600); // Random position (0-800, 0-600
-		Vector2f direction(rand() % 2 == 0 ? 1 : -1, rand() % 2 == 0 ? 1 : -1);
-		entity->SetPosition(position);
-		entity->SetDirection(direction);
-		entityList.AddEntity(entity);
-	}
+
+	std::queue<NetCommand> commandQueue;
+
 	while (!quit)
 	{
 		float dt = clock.restart().asSeconds();
 		timeAccumulator += dt;
 
-		while (timeAccumulator >= TICKRATE)
+		while (timeAccumulator >= TICKRATIO)
 		{	
-			totalTime += sf::seconds(TICKRATE);
+			HandleCommands(commandQueue, entityList, ticks);
 			Listen(socket, entityList, clientList);
 			SendEntities(socket, entityList, clientList, ticks);
-			entityList.Update(sf::seconds(TICKRATE));
-			timeAccumulator -= TICKRATE;
+			entityList.Update(sf::seconds(TICKRATIO));
+			timeAccumulator -= TICKRATIO;
 			ticks++;
 		}
 	}

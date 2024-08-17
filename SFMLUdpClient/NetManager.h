@@ -81,10 +81,15 @@ void Listen(sf::UdpSocket& socket, GameState*& currentState, GameState*& nextSta
 		int id;
 	case PacketType::Entities:
 	{
+		int ticks;
+		packet >> ticks;
+		if (currentState->GetTicks() >= ticks)
+			return;
+
 		GameState* tempCurrent = currentState;
 		GameState* tempNext = nextState;
 		currentState = tempNext;
-		nextState = new GameState(tempCurrent->GetEntityList(), packet);
+		nextState = new GameState(tempCurrent->GetEntityList(), packet, ticks);
 		delete tempCurrent;
 	}
 	break;
@@ -94,7 +99,7 @@ void Listen(sf::UdpSocket& socket, GameState*& currentState, GameState*& nextSta
 		break;
 	}
 }
-void InterPolateEntities(GameState* current, GameState* next, float alpha)
+void InterPolateEntities(GameState* current, GameState* next, float dt)
 {
 	if (current == nullptr || next == nullptr)
 		return;
@@ -108,6 +113,7 @@ void InterPolateEntities(GameState* current, GameState* next, float alpha)
 		BaseEntity* nextEntity = nextList->GetEntityById(currentEntity->GetId());
 		if (nextEntity == nullptr)
 			continue;
+		float alpha = dt / TICKRATIO;
 		sf::Vector2f position = currentEntity->GetPosition() + (nextEntity->GetPosition() - currentEntity->GetPosition()) * alpha;
 		currentEntity->SetPosition(position);
 	}

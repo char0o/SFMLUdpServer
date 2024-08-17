@@ -17,32 +17,32 @@ Client::~Client()
 
 }
 
-int Client::getId()
+int Client::GetId()
 {
 	return id;
 }
 
-sf::IpAddress Client::getIp()
+sf::IpAddress Client::GetIp()
 {
 	return ip;
 }
 
-unsigned short Client::getPort()
+unsigned short Client::GetPort()
 {
 	return port;
 }
 
-void Client::setId(int id)
+void Client::SetId(int id)
 {
 	this->id = id;
 }
 
-void Client::setIp(sf::IpAddress ip)
+void Client::SetIp(sf::IpAddress ip)
 {
 	this->ip = ip;
 }
 
-void Client::setPort(unsigned short port)
+void Client::SetPort(unsigned short port)
 {
 	this->port = port;
 }

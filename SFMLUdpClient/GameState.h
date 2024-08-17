@@ -8,7 +8,7 @@ class GameState
 public:
 	GameState();
 	GameState(EntityList* entityList);
-	GameState(EntityList* entityList, sf::Packet& packet);
+	GameState(EntityList* entityList, sf::Packet& packet, int ticks);
 	~GameState();
 	void Update(float dt);
 	void Draw(sf::RenderWindow& window);

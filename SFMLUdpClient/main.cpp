@@ -29,8 +29,8 @@ int main(int argc, char* argv[])
 	}
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML UDP Client");
-	sf::Time totalTime = sf::Time::Zero;
-	sf::Clock dtClock = sf::Clock();
+	sf::Clock clock;
+	float accumulator = 0.0f;
 
 	window.setFramerateLimit(165);
 
@@ -41,6 +41,14 @@ int main(int argc, char* argv[])
 	while (window.isOpen())
 	{
 		sf::Event event;
+		sf::Time elapsed = clock.restart();
+		float dt = elapsed.asSeconds();
+		accumulator += dt;
+		while (accumulator >= TICKRATIO)
+		{
+			Listen(*socket, currentState, nextState);
+			accumulator -= TICKRATIO;
+		}
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
@@ -51,24 +59,21 @@ int main(int argc, char* argv[])
 			{
 				if (event.key.code == sf::Keyboard::I)
 				{
+					
 					interp = !interp;
+					cout << "Interpolation: " << interp << endl;
 				}
 			}
 		}
 		
 		
 		window.clear();
-		currentState->Color(sf::Color::Red);
-		nextState->Color(sf::Color::Blue);
-
-		float alpha = (totalTime.asMilliseconds() % (int)(TICKRATE * 100)) / (TICKRATE * 100.0f);
-		if (interp)
-			InterPolateEntities(currentState, nextState, alpha);
 		currentState->Draw(window);
-		//nextState->Draw(window);
 		window.display();
-		Listen(*socket, currentState, nextState);
-		totalTime += dtClock.restart();
+
+
+		if (interp)
+			InterPolateEntities(currentState, nextState, accumulator / TICKRATE);
 	}
 	SendDisconnectPacket(*socket);
 	if (socket != nullptr)

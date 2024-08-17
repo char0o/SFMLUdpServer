@@ -2,6 +2,7 @@
 #include <vector>
 #include "Client.h"
 #include <SFML/Network.hpp>
+#include "EntityListPacket.h"
 #include "EntityList.h"
 #include "Packets.hpp"
 class ClientList

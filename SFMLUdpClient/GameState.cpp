@@ -3,20 +3,20 @@
 GameState::GameState()
 {
 	this->entityList = nullptr;
+	this->ticks = 0;
 }
 
 GameState::GameState(EntityList* entityList)
 {
 	this->entityList = entityList;
+	this->ticks = ticks;
 }
 
-GameState::GameState(EntityList* entityList, sf::Packet& packet)
+GameState::GameState(EntityList* entityList, sf::Packet& packet, int ticks)
 {
 	this->entityList = entityList;
 	int id;
 	int size;
-	int ticks;
-	packet >> ticks;	
 	this->ticks = ticks;
 	packet >> size;
 	for (int i = 0; i < size; i++)

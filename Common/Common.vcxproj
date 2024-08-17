@@ -144,22 +144,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CommandPacket.h" />
     <ClInclude Include="ConnectPacket.h" />
     <ClInclude Include="DisconnectPacket.h" />
-    <ClInclude Include="EntityList.h" />
     <ClInclude Include="BaseEntity.h" />
-    <ClInclude Include="EntityListPacket.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="NetCommand.h" />
     <ClInclude Include="Packets.hpp" />
     <ClInclude Include="PacketType.h" />
     <ClInclude Include="PlayerPacket.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CommandPacket.cpp" />
     <ClCompile Include="ConnectPacket.cpp" />
     <ClCompile Include="DisconnectPacket.cpp" />
-    <ClCompile Include="EntityList.cpp" />
     <ClCompile Include="BaseEntity.cpp" />
-    <ClCompile Include="EntityListPacket.cpp" />
+    <ClCompile Include="NetCommand.cpp" />
     <ClCompile Include="PlayerPacket.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
